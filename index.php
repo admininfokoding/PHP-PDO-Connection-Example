@@ -1,24 +1,12 @@
 <?php
+// index.php
 header("Content-Type: application/json");
 
-// Konfigurasi Database
-$host = '127.0.0.1';
-$db   = 'belajar_backend_db';
-$user = 'root';
-$pass = 'passwordrahasia';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+// 1. Memanggil Koneksi (PDO)
+/** @var PDO $pdo */
+$pdo = require __DIR__ . '/database.php';
 
 try {
-    // 1. Membuat Koneksi (PDO)
-    $pdo = new PDO($dsn, $user, $pass, $options);
-
     $method = $_SERVER['REQUEST_METHOD'];
 
     // 2. Routing Sederhana
@@ -64,7 +52,6 @@ try {
     http_response_code(500);
     echo json_encode([
         "status" => "error", 
-        "message" => "Database Error: " . $e->getMessage()
+        "message" => "Query Error: " . $e->getMessage()
     ]);
 }
-?>
